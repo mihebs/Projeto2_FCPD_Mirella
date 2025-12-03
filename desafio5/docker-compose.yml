@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  users_api:
+    build: ./users
+    networks:
+      - microservices_net
+
+  orders_api:
+    build: ./orders
+    networks:
+      - microservices_net
+
+  api_gateway:
+    build: ./haproxy
+    ports:
+      - "8080:80"
+    networks:
+      - microservices_net
+    depends_on:
+      - users_api
+      - orders_api
+
+networks:
+  microservices_net:
+    driver: bridge
